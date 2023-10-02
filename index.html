@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NetVoyage</title>
+    <link rel="icon" href="https://icons.getbootstrap.com/assets/icons/rocket-takeoff.svg">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  </head>
+  <style>
+    #loading{
+        background-image: linear-gradient(to right, cyan, blue);
+        width: 100%;
+        height: 3px;
+        position: absolute;
+        top: 56px;
+        left: 0;
+    }
+    #bottom{
+        background-image: linear-gradient(to right, cyan, blue);
+        width: 100%;
+        height: 3px;
+        position: absolute;
+        bottom: 50px;
+        left: 0;
+    }
+    #bottom-widgets{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 50px;
+        width: 100%;
+        display: grid;
+        place-items: center;
+    }
+    #main{
+        position: absolute;
+        top: 58px;
+        bottom: 53px;
+        left: 0;
+        right:0;
+        width: 100%;
+    }
+    #contain{
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: 100%;
+        overflow: auto;
+        background-image: linear-gradient(to right, rgb(153, 0, 255), cyan);
+        color: white;
+        display: grid;
+        place-items: center;
+    }
+    #lock{
+        position: absolute;
+        top: -50000px;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        display: grid;
+        place-items: center;
+        background-image: linear-gradient(to right, rgb(153,0,255), cyan);
+        color: white;
+    }
+  </style>
+  <body>
+    <div id="bottom" class="load"></div>
+    <div id="bottom-widgets">
+        <div style="display: flex; place-items: center;">
+            <button id="settings" class="btn">
+                <i class="bi bi-gear"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+                    <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+                    <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
+                </svg>
+            </button>
+            <input id="query" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Search any query or URL...">
+            <button class="btn" onclick="sendMessage()">
+                <i class="bi bi-send"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+                    <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+    <div id="main">
+        <div id="contain">
+            <div style="display: grid; place-items: center;">
+                <h3>
+                    <i class="bi bi-rocket-takeoff"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-rocket-takeoff" viewBox="0 0 16 16">
+                        <path d="M9.752 6.193c.599.6 1.73.437 2.528-.362.798-.799.96-1.932.362-2.531-.599-.6-1.73-.438-2.528.361-.798.8-.96 1.933-.362 2.532Z"/>
+                        <path d="M15.811 3.312c-.363 1.534-1.334 3.626-3.64 6.218l-.24 2.408a2.56 2.56 0 0 1-.732 1.526L8.817 15.85a.51.51 0 0 1-.867-.434l.27-1.899c.04-.28-.013-.593-.131-.956a9.42 9.42 0 0 0-.249-.657l-.082-.202c-.815-.197-1.578-.662-2.191-1.277-.614-.615-1.079-1.379-1.275-2.195l-.203-.083a9.556 9.556 0 0 0-.655-.248c-.363-.119-.675-.172-.955-.132l-1.896.27A.51.51 0 0 1 .15 7.17l2.382-2.386c.41-.41.947-.67 1.524-.734h.006l2.4-.238C9.005 1.55 11.087.582 12.623.208c.89-.217 1.59-.232 2.08-.188.244.023.435.06.57.093.067.017.12.033.16.045.184.06.279.13.351.295l.029.073a3.475 3.475 0 0 1 .157.721c.055.485.051 1.178-.159 2.065Zm-4.828 7.475.04-.04-.107 1.081a1.536 1.536 0 0 1-.44.913l-1.298 1.3.054-.38c.072-.506-.034-.993-.172-1.418a8.548 8.548 0 0 0-.164-.45c.738-.065 1.462-.38 2.087-1.006ZM5.205 5c-.625.626-.94 1.351-1.004 2.09a8.497 8.497 0 0 0-.45-.164c-.424-.138-.91-.244-1.416-.172l-.38.054 1.3-1.3c.245-.246.566-.401.91-.44l1.08-.107-.04.039Zm9.406-3.961c-.38-.034-.967-.027-1.746.163-1.558.38-3.917 1.496-6.937 4.521-.62.62-.799 1.34-.687 2.051.107.676.483 1.362 1.048 1.928.564.565 1.25.941 1.924 1.049.71.112 1.429-.067 2.048-.688 3.079-3.083 4.192-5.444 4.556-6.987.183-.771.18-1.345.138-1.713a2.835 2.835 0 0 0-.045-.283 3.078 3.078 0 0 0-.3-.041Z"/>
+                        <path d="M7.009 12.139a7.632 7.632 0 0 1-1.804-1.352A7.568 7.568 0 0 1 3.794 8.86c-1.102.992-1.965 5.054-1.839 5.18.125.126 3.936-.896 5.054-1.902Z"/>
+                    </svg>
+                    NetVoyage
+                </h3>
+                <p>A perfect Gaming browser</p>
+            </div>
+        </div>
+    </div>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="">
+            NetVoyage
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="https://yash12007.github.io">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="https://yash12007.github.io/Max#about">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="https://yash12007.github.io/Max#services">Services</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="https://yash12007.github.io/Max/contact.html">Contact</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="https://yash12007.github.io/Max#privacy-policy">Privacy & Policy</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="https://yash12007.github.io/Max#terms-conditions">Terms & Conditions</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+    </nav>
+    <div id="loading" class="load"></div>
+    <button id="offcanvasbtn" class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" style="position: absolute; top: -50000px; left: -50000px;"></button>
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+        <h3 class="offcanvas-title" id="offcanvasExampleLabel">Settings</h3>
+        <button type="button" class="btn" data-bs-dismiss="offcanvas">X</button>
+    </div>
+    <div class="offcanvas-body">
+        <div id="offcanvas-des">
+            Settings for browser features, appearance & productivity.
+        </div>
+        <div class="dropdown mt-3" id="offcanvasbody">
+            <h5>Features</h5>
+            <b>Account</b>
+            <br>
+            <button id='user-info' onclick='signInWithGoogle()' class='btn'>
+                <i class="bi bi-person-circle"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                    <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                </svg>
+                Sign up with Google
+            </button>
+            <br>
+            <b>Search engine</b>
+            <br>
+            <select class="form-select" aria-label="Select search engine" id="search">
+                <option value="Google">Google</option>
+                <option value="Bing">Bing</option>
+                <option value="Yahoo">Yahoo India</option>
+            </select>
+            <br>
+            <h5>Appearance</h5>
+            <b>Theme</b>
+            <br>
+            <button class="nav-link active" id='theme' onclick="switchtheme()">
+                <i class="bi bi-moon-stars"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-moon-stars" viewBox="0 0 16 16">
+                    <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278zM4.858 1.311A7.269 7.269 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.316 7.316 0 0 0 5.205-2.162c-.337.042-.68.063-1.029.063-4.61 0-8.343-3.714-8.343-8.29 0-1.167.242-2.278.681-3.286z"/>
+                    <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z"/>
+                </svg>
+                Dark theme
+            </button>
+            <br>
+            <b>Background</b>
+            <br>
+            <button class='btn' style='background:black; color:white;' onclick='black()'>
+                Black
+            </button>
+            <button class='btn' style='background:white; color:black;' onclick='white()'>
+                White
+            </button>
+            <button class='btn' style='background-image: linear-gradient(to right, rgb(153, 0, 255), cyan); color:white;' onclick='theme()'>
+                default
+            </button>
+            <br>
+            <b>Progress bar theme</b>
+            <br>
+            <button class="btn" style="background-image: linear-gradient(to right, orange, red); color: white;" onclick="red()">
+                Red
+            </button>
+            <button class="btn" style="background-image: linear-gradient(to right, yellow, green); color: white;" onclick="green()">
+                Green
+            </button>
+            <button class="btn" style="background-image: linear-gradient(to right, cyan, blue); color: white;" onclick="blue()">
+                Blue
+            </button>
+            <h5>Productivity</h5>
+            <b>Set 6-digit Pin</b>
+            <p>Remember! password setting is only for web users</p>
+            <input id="pass" type="password" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="******">
+            <button class="btn" onclick="setpin()">Set</button>
+            <br>
+            <b>Storage & cache</b>
+            <br>
+            <p id="storage">Reading cache...</p>
+            <button class="btn btn-danger" onclick="del()">
+                Clear
+            </button>
+            <br>
+            <b>Usage</b>
+            <br>
+            <p id="usage">Checking...</p>
+        </div>
+    </div>
+    </div>
+    <div id="lock">
+        <div style="display: grid; place-items: center;">
+            <i class="bi bi-person-circle"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+            </svg>
+            <br>
+            <p>Login with your 6-digit Pin</p>
+            <br>
+            <input type="password" style="background: none; color: white; border-radius: 10px; height: 30px; width: 80%;" id="lockpass" autofocus>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  </body>
+  <script>
+    var load = document.getElementById('loading');
+    var bottom = document.getElementById('bottom');
+    function red(){
+        load.setAttribute('style', 'background-image:linear-gradient(to right, orange, red);');
+        bottom.setAttribute('style', 'background-image:linear-gradient(to right, orange, red);');
+    }
+    function green(){
+        load.setAttribute('style', 'background-image:linear-gradient(to right, yellow, green);');
+        bottom.setAttribute('style', 'background-image:linear-gradient(to right, yellow, green);');
+    }
+    function blue(){
+        load.setAttribute('style', 'background-image:linear-gradient(to right, cyan, blue);');
+        bottom.setAttribute('style', 'background-image:linear-gradient(to right, cyan, blue);');
+    }
+    function setpin(){
+        let pass = document.getElementById('pass').value;
+        localStorage.setItem('passforbrowser', pass);
+    }
+    function verify(){
+        var pass = localStorage.getItem('passforbrowser');
+        if (pass == null){
+            console.log('no pin found');
+        } else{
+            document.getElementById('lock').setAttribute('style', 'top:0;');
+        }
+    }
+    verify();
+    function verifing(){
+        var pass = localStorage.getItem('passforbrowser');
+        var enteredval = document.getElementById('lockpass').value;
+        if (enteredval == pass){
+            document.getElementById('lock').setAttribute('style', 'top:-50000px;');
+        } else{
+            const p = document.createElement('p');
+            p.innerHTML='Incorrect Pin, try again.';
+            document.getElementById('lock').appendChild(p);
+        }
+    }
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("lockpass").addEventListener("keydown", (event) => {
+            if (event.key === 'Enter') {
+                verifing();
+            }
+        });
+    });
+    function formatTime(minutes, seconds) {
+      return `${minutes}.${seconds} minutes`;
+    }
+    function checktimespend(){
+        const startTime = new Date();
+        const endTime = new Date();
+        const timeDifference = endTime - startTime;
+        const minutes = Math.floor(timeDifference / 60000);
+        const seconds = Math.floor((timeDifference % 60000) / 1000);
+        document.getElementById('usage').innerHTML=`You spent ${formatTime(minutes, seconds)} on this page.`;
+        setTimeout(checktimespend, 2000);
+    }
+    checktimespend();
+    function calculatestorage(){
+        let totalSizeInBytes = 0;
+        for (let key in localStorage) {
+            if (localStorage.hasOwnProperty(key)) {
+            const itemSizeInBytes = (key.length + localStorage[key].length) * 2; 
+            totalSizeInBytes += itemSizeInBytes;
+            }
+        }
+        const totalSizeInMB = (totalSizeInBytes / (1024 * 1024)).toFixed(2);
+        return totalSizeInMB;
+    }
+    document.getElementById('storage').innerHTML = calculatestorage()+'MB';
+    function del(){
+        if (confirm('This will delete all accounts and cache from this page, Are you sure want to delete?')==true){
+            localStorage.clear();
+        }
+    }
+    const radioButtons = document.querySelectorAll('input[type="radio"]');
+    const pageurl = document.getElementById('pageurl');
+    radioButtons.forEach((radioButton) => {
+      radioButton.addEventListener('change', (event) => {
+        const page = event.target.value;
+        if (page == '1'){
+            localStorage.setItem('pageurl', null);
+        }
+        if (page == '2'){
+            localStorage.setItem('pageurl', pageurl);
+        }
+      });
+    });
+
+    let searchengine = 'Google';
+
+    document.getElementById('search').addEventListener('change', () => {
+        searchengine = document.getElementById('search').value;
+        console.log(searchengine);
+    });
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("query").addEventListener("keydown", (event) => {
+            if (event.key === 'Enter') {
+                search();
+            }
+        });
+    });
+    document.getElementById('settings').addEventListener('click', ()=>{
+        document.getElementById('offcanvasbtn').click();
+    });
+    function black(){
+        document.getElementById('contain').setAttribute('style', 'background-image: none; background:black; color:white;');
+    }
+    function white(){
+        document.getElementById('contain').setAttribute('style', 'background-image: none; background:white; color:black;');
+    }
+    function theme(){
+        document.getElementById('contain').setAttribute('style', 'background-image: linear-gradient(to right, rgb(153, 0, 255), cyan); color:white;');
+    }
+    function switchtheme() {
+        var body = document.body;
+        var currentTheme = body.getAttribute('data-bs-theme');
+        if (currentTheme === 'dark') {
+            lighttheme();
+        } else {
+            darktheme();
+        }
+    }
+    function darktheme(){
+        var body = document.body;
+        body.setAttribute('data-bs-theme', 'dark');
+        document.getElementById('theme').innerHTML=`
+        <i class="bi bi-brightness-high"></i>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-brightness-high" viewBox="0 0 16 16">
+            <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+        </svg>
+        Light theme
+        `;
+    }
+    function lighttheme(){
+        var body = document.body;
+        body.setAttribute('data-bs-theme', '');
+        document.getElementById('theme').innerHTML=`
+            <i class="bi bi-moon-stars"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-moon-stars" viewBox="0 0 16 16">
+                <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278zM4.858 1.311A7.269 7.269 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.316 7.316 0 0 0 5.205-2.162c-.337.042-.68.063-1.029.063-4.61 0-8.343-3.714-8.343-8.29 0-1.167.242-2.278.681-3.286z"/>
+                <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z"/>
+            </svg>
+            Dark theme
+        `;
+    }
+    function signInWithGoogle() {
+        const datetime = Date();
+        fetch('https://api64.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+            const ipAddress = data.ip;
+            localStorage.setItem('IP', ipAddress);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+        localStorage.setItem('Signup-date', datetime);
+        const clientId = '364524252352-mueplfnejbmn0jupc9ut4j7kdsf7md8s.apps.googleusercontent.com';
+        const redirectUri = 'https://yash12007.github.io/';
+        const googleSignInUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=token&scope=email%20profile`;
+        window.open(googleSignInUrl, '_self');
+    }
+    function getUserInfo(accessToken) {
+        const userInfoUrl = `https://www.googleapis.com/oauth2/v2/userinfo?access_token=${accessToken}`;
+        try{
+            localStorage.setItem('account', userInfoUrl);
+        } catch(e){
+            alert('Error while add account in your device');
+        }
+        fetch(userInfoUrl)
+            .then(response => response.json())
+            
+            .then(data => {
+                // Update the user-info element with user account information
+                const userInfoElement = document.getElementById('user-info');
+                userInfoElement.innerHTML = `
+                    <img src='${data.picture}' alt='Profile Picture' width='30' height='30' style='border-radius: 50%; margin-right: 5px;'>
+                    Welcome, ${data.name}
+                `;
+            })
+            .catch(error => console.error('Error fetching user information:', error));
+    }
+    function handleGoogleSignIn() {
+        const urlParams = new URLSearchParams(window.location.hash.substr(1));
+        const accessToken = urlParams.get('access_token');
+        if (accessToken) {
+            getUserInfo(accessToken);
+        }
+    }
+    handleGoogleSignIn();
+    try{
+        const account = localStorage.getItem('account');
+        if (account == null){
+            console.log('No account founded');
+        }else{
+            fetch(account)
+            .then(response => response.json())
+            .then(data => {
+                const userInfoElement = document.getElementById('user-info');
+                userInfoElement.innerHTML = `
+                    <img src='${data.picture}' alt='Profile Picture' width='30' height='30' style='border-radius: 50%; margin-right: 5px;'>
+                    Welcome, ${data.name}
+                `;
+            })
+            .catch(error => console.error('Error fetching user information:', error));
+        }
+    } catch(error){
+        console.log(error);
+    }
+    function expand(){
+        window.location.href = document.getElementById('iframe').src;
+    }
+    function clearbrowser(){
+        document.getElementById('contain').removeChild(document.getElementById('iframe'));
+        document.getElementById('contain').removeChild(document.getElementById('prompt'));
+    }
+    function search(){
+        var query = document.getElementById('query').value;
+        const iframe = document.createElement('iframe');
+        const div = document.createElement('div');
+        div.innerHTML = `
+            <p>Is there any need to expand webpage/website or Error in loading results?</p>
+            <div style="display: flex;">
+                <button class="btn" style="color: white;">Yes</button>
+                <button class="btn" style="color: white;" onclick='expand()'>No</button>
+                <button class='btn' style='color: white;' onclick='clearbrowser()'>Close windows</button>
+            </div>
+        `;
+        div.id = 'prompt';
+        iframe.id = 'iframe'
+        iframe.width = '80%';
+        iframe.height = '100%';
+        iframe.setAttribute('style', 'border-radius:10px;');
+        if (searchengine == 'Google'){
+            const regex = new RegExp('http', "gi");
+            const matches = query.match(regex);
+            if (matches) {
+                iframe.src = query;
+                document.getElementById('contain').appendChild(iframe);
+                document.getElementById('contain').appendChild(div);
+            } else {
+                iframe.src = 'https://www.google.com/search?q='+query+'&igu=1';
+                document.getElementById('contain').appendChild(iframe);
+                document.getElementById('contain').appendChild(div);
+            }
+        } 
+        if (searchengine == 'Bing'){
+            const regex = new RegExp('http', "gi");
+            const matches = query.match(regex);
+            if (matches) {
+                iframe.src = query;
+                document.getElementById('contain').appendChild(iframe);
+                document.getElementById('contain').appendChild(div);
+            } else {
+                iframe.src = 'https://www.bing.com/search?q='+query+'&igu=1';
+                document.getElementById('contain').appendChild(iframe);
+                document.getElementById('contain').appendChild(div);
+            }
+        }
+        if (searchengine == 'Yahoo'){
+            const regex = new RegExp('http', "gi");
+            const matches = query.match(regex);
+            if (matches) {
+                iframe.src = query;
+                document.getElementById('contain').appendChild(iframe);
+                document.getElementById('contain').appendChild(div);
+            } else {
+                iframe.src = 'https://in.search.yahoo.com/search?q='+query+'&igu=1';
+                document.getElementById('contain').appendChild(iframe);
+                document.getElementById('contain').appendChild(div);
+            }
+        }
+    }
+  </script>
+</html>
