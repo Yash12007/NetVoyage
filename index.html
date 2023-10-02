@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -69,7 +70,7 @@
     <div id="bottom" class="load"></div>
     <div id="bottom-widgets">
         <div style="display: flex; place-items: center;">
-            <button id="settings" class="btn">
+            <button id="offcanvasbtn" class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
                 <i class="bi bi-gear"></i>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
                     <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
@@ -134,7 +135,6 @@
         </div>
     </nav>
     <div id="loading" class="load"></div>
-    <button id="offcanvasbtn" class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" style="position: absolute; top: -50000px; left: -50000px;"></button>
     <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
     <div class="offcanvas-header">
         <h3 class="offcanvas-title" id="offcanvasExampleLabel">Settings</h3>
@@ -336,9 +336,6 @@
                 search();
             }
         });
-    });
-    document.getElementById('settings').addEventListener('click', ()=>{
-        document.getElementById('offcanvasbtn').click();
     });
     function black(){
         document.getElementById('contain').setAttribute('style', 'background-image: none; background:black; color:white;');
