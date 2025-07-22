@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
   <head>
@@ -116,19 +115,19 @@
                 <a class="nav-link active" aria-current="page" href="https://yash12007.github.io">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="https://yash12007.github.io/Max#about">About</a>
+                <a class="nav-link active" href="https://www.yash12007.com/Max#about">About</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="https://yash12007.github.io/Max#services">Services</a>
+                <a class="nav-link active" href="https://www.yash12007.com/Max#services">Services</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="https://yash12007.github.io/Max/contact.html">Contact</a>
+                <a class="nav-link active" href="https://www.yash12007.com/Max/contact.html">Contact</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="https://yash12007.github.io/Max#privacy-policy">Privacy & Policy</a>
+                <a class="nav-link active" href="https://www.yash12007.com/Max#privacy-policy">Privacy & Policy</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="https://yash12007.github.io/Max#terms-conditions">Terms & Conditions</a>
+                <a class="nav-link active" href="https://www.yash12007.com/Max#terms-conditions">Terms & Conditions</a>
               </li>
             </ul>
           </div>
@@ -339,7 +338,7 @@
     });
     function black(){
         document.getElementById('contain').setAttribute('style', 'background-image: none; background:black; color:white;');
-    }
+    }black();
     function white(){
         document.getElementById('contain').setAttribute('style', 'background-image: none; background:white; color:black;');
     }
@@ -365,7 +364,7 @@
         </svg>
         Light theme
         `;
-    }
+    }darktheme();
     function lighttheme(){
         var body = document.body;
         body.setAttribute('data-bs-theme', '');
@@ -391,7 +390,7 @@
         });
         localStorage.setItem('Signup-date', datetime);
         const clientId = '364524252352-mueplfnejbmn0jupc9ut4j7kdsf7md8s.apps.googleusercontent.com';
-        const redirectUri = 'https://yash12007.github.io/NetVoyage';
+        const redirectUri = 'https://www.yash12007.com/NetVoyage';
         const googleSignInUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=token&scope=email%20profile`;
         window.open(googleSignInUrl, '_self');
     }
@@ -451,21 +450,11 @@
     }
     function search(){
         var query = document.getElementById('query').value;
+        document.getElementById("contain").innerHTML="";
         const iframe = document.createElement('iframe');
-        const div = document.createElement('div');
-        div.innerHTML = `
-            <p>Is there any need to expand webpage/website or Error in loading results?</p>
-            <div style="display: flex;">
-                <button class="btn" style="color: white;">Yes</button>
-                <button class="btn" style="color: white;" onclick='expand()'>No</button>
-                <button class='btn' style='color: white;' onclick='clearbrowser()'>Close windows</button>
-            </div>
-        `;
-        div.id = 'prompt';
         iframe.id = 'iframe'
-        iframe.width = '80%';
+        iframe.width = '100%';
         iframe.height = '100%';
-        iframe.setAttribute('style', 'border-radius:10px;');
         if (searchengine == 'Google'){
             const regex = new RegExp('http', "gi");
             const matches = query.match(regex);
